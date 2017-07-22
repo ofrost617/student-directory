@@ -1,48 +1,62 @@
+@students = []
 
 def interactive_menu
-  students = []
 # 1. Print the menu and ask the user what to do
 # 2. Read the input and save it to a variable
 # 3. Do what the user has asked
 # 4. Repeat from step 1
   loop do 
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit"
-    selection = gets.chomp
+    print_menu
+    process(gets.chomp)
+  end
+end
+
+def process(selection)
     case selection
       when "1"
-        students = input_students
+        input_students
       when "2"
-        print_header
-        print(students)
-        print_footer(students)
+        show_students
       when "9"
         exit
       else
         puts "I don't know what you meant, try again"
     end  
   end 
+
+#Refactoring step 10- breaking down interactive_menu into smaller methods. These methods are defined OUTSIDE of interactive_menu because you can't 
+# define a method within a method
+  # Define a print_menu method
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
 end
+  # Define a show_students method
+def show_students
+  print_header
+  print_students_list(@students)
+  print_footer(@students)
+end
+
 
 # Define a new method to get student input
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice" 
  #Create empty array for students to go into
-  students = []
 # Get the first name
   name = gets.chomp
 # While the name is not empty, repeat this code. Empty method is part of the string class
   while !name.empty? do
 # Add the student hash to the array. << is the shovel operator and is used to add things into an array
-    students << {name: name, cohort: :november}
-    puts "Now we have #{students.count} students"
+    @students << {name: name, cohort: :november}
+    puts "Now we have #{@students.count} students"
 # get another name from the user
     name = gets.chomp
   end
 # Return the array of students
-  students
+  @students
 end
 
 
@@ -52,7 +66,7 @@ def print_header
   puts "------------"
 end
 
-def print(students)
+def print_students_list(students)
   students.each.with_index(1) { |student, index| puts "#{index} #{student[:name]} (#{student[:cohort]} cohort)" }
 end
 
